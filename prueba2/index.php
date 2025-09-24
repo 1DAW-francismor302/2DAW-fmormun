@@ -12,37 +12,39 @@ function dump($var){
 }
 
 //Función lógica presentación
-function getTableroMarkup($tableroData){
+function getTableroMArkup ($tablero){
     $output = '';
-    dump($tableroData);
-    foreach ($tableroData as $filaIndex => $datosFila) {
+    //dump($tablero);
+    foreach ($tablero as $filaIndex => $datosFila) {
         foreach ($datosFila as $columnaIndex => $tileType) {
-            $output .= '<div class = "tile' . $tileType . '"></div>'
+            //dump($tileType);
+            $output .= '<div class = "tile ' . $tileType . '"></div>';
         }
     }
+
     return $output;
 
-
+}
 //Lógica de negocio
 //El tablero es un array bidimensional en el que cada fila contiene 12 palabras cuyos valores pueden ser:
 // agua
 //fuego
 //tierra
 // hierba
-$tablero = [
-    ['agua','fuego','fuego','agua','fuego','fuego','agua','fuego','fuego','agua','fuego','fuego',],
-    ['agua','fuego','fuego','agua','fuego','fuego','agua','fuego','fuego','agua','fuego','fuego',],
-    ['agua','fuego','fuego','agua','fuego','fuego','agua','fuego','fuego','agua','fuego','fuego',],
-    ['agua','fuego','fuego','agua','fuego','fuego','agua','fuego','fuego','agua','fuego','fuego',],
-    ['agua','fuego','fuego','agua','fuego','fuego','agua','fuego','fuego','agua','fuego','fuego',],
-    ['agua','fuego','fuego','agua','fuego','fuego','agua','fuego','fuego','agua','fuego','fuego',],
-    ['agua','fuego','fuego','agua','fuego','fuego','agua','fuego','fuego','agua','fuego','fuego',],
-    ['agua','fuego','fuego','agua','fuego','fuego','agua','fuego','fuego','agua','fuego','fuego',],
-    ['agua','fuego','fuego','agua','fuego','fuego','agua','fuego','fuego','agua','fuego','fuego',],
-    ['agua','fuego','fuego','agua','fuego','fuego','agua','fuego','fuego','agua','fuego','fuego',],
-    ['agua','fuego','fuego','agua','fuego','fuego','agua','fuego','fuego','agua','fuego','fuego',],
-    ['agua','fuego','fuego','agua','fuego','fuego','agua','fuego','fuego','agua','fuego','fuego',],
-];
+function leerArchivoCSV($archivoCSV) {
+    $tablero = [];
+
+    if (($puntero = fopen($archivoCSV, "r")) !== FALSE) {
+        while (($datosFila = fgetcsv($puntero)) !== FALSE) {
+            $tablero[] = $datosFila;
+        }
+        fclose($puntero);
+    }
+
+    return $tablero;
+}
+
+$tablero = leerArchivoCSV('contenido_tablero/contenido.csv');
 
 //Lógica de presentación
 $tableroMarkup = getTableroMArkup($tablero);
