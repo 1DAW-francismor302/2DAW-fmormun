@@ -5,6 +5,7 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+
 /* Zona de declaración de funciones */
 //Funciones de debugueo
 function dump($var){
@@ -12,13 +13,19 @@ function dump($var){
 }
 
 //Función lógica presentación
-function getTableroMArkup ($tablero){
+function getTableroMArkup ($tablero, $personaje){
+    $cont = 0;
     $output = '';
     //dump($tablero);
     foreach ($tablero as $filaIndex => $datosFila) {
         foreach ($datosFila as $columnaIndex => $tileType) {
+            $cont++;
             //dump($tileType);
-            $output .= '<div class = "tile ' . $tileType . '"></div>';
+            if ($cont == $personaje) {
+                $output .= '<div class = "tile ' . $tileType . '"><img src="./src/iron_man.webp" class="personaje"></div>';
+            }else {
+                $output .= '<div class = "tile ' . $tileType . '"></div>';
+            }
         }
     }
 
@@ -31,6 +38,8 @@ function getTableroMArkup ($tablero){
 //fuego
 //tierra
 // hierba
+
+
 function leerArchivoCSV($archivoCSV) {
     $tablero = [];
 
@@ -45,9 +54,9 @@ function leerArchivoCSV($archivoCSV) {
 }
 
 $tablero = leerArchivoCSV('contenido_tablero/contenido.csv');
-
+$personaje = rand(0,143);
 //Lógica de presentación
-$tableroMarkup = getTableroMArkup($tablero);
+$tableroMarkup = getTableroMArkup($tablero, $personaje);
 
 
 ?>
@@ -64,27 +73,39 @@ $tableroMarkup = getTableroMArkup($tablero);
             border-radius: 5px;
             border: solid 2px grey;
             box-shadow: grey;
+            display:grid;
+            grid-template-columns: repeat(12, 1fr);
+            grid-template-rows: repeat(12, 1fr);
+        }
+        .personaje {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            position: relative;
+            top: 5px;
+            left: 5px;
         }
         .tile {
-            width: 50px;
-            height: 50px;
+            /*width: 50px;
+            height: 50px;*/
             float: left;
             margin: 0;
             padding: 0;
             border-width: 0;
-
+            background-image: url("./src/464.jpg");
+            background-size: 209px;
         }
         .fuego {
-            background-color: red;
+            background-position:103px -53px;
         }
         .tierra {
-            background-color: brown;
+            background-position:51px -1px;
         }
         .agua {
-            background-color: blue;
+            background-position:-54px -1px;
         }
         .hierba {
-            background-color: green;
+            background-position:208px 208px;
         }
     </style>
 </head>
