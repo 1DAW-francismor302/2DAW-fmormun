@@ -8,21 +8,22 @@ error_reporting(E_ALL);
 
 /* Zona de declaración de funciones */
 //Funciones de debugueo
+
+procesaRedirect();
+
 function dump($var){
     echo '<pre>'.print_r($var,1).'</pre>';
 }
 
 //Función lógica presentación
 function getTableroMArkup ($tablero, $personaje){
-    $cont = 0;
     $output = '';
     //dump($tablero);
     foreach ($tablero as $filaIndex => $datosFila) {
         foreach ($datosFila as $columnaIndex => $tileType) {
-            $cont++;
             //dump($tileType);
-            if ($cont == $personaje) {
-                $output .= '<div class = "tile ' . $tileType . '"><img src="./src/iron_man.webp" class="personaje"></div>';
+            if(isset($personaje)&&($filaIndex == $personaje['row'])&&($columnaIndex == $personaje['col'])){
+                $output .= '<div class = "tile ' . $tileType . '"><img src="src/iron_man.webp" class="personaje"></div>';
             }else {
                 $output .= '<div class = "tile ' . $tileType . '"></div>';
             }
@@ -32,6 +33,35 @@ function getTableroMArkup ($tablero, $personaje){
     return $output;
 
 }
+
+function getArrowsMarkup($personaje){
+    
+    $arriba = "?row=". ($personaje["row"]-1) . "&col=" . ($personaje["col"]);
+    $abajo = "?row=". ($personaje["row"]+1) . "&col=" . ($personaje["col"]);
+    $derecha = "?row=". ($personaje["row"]) . "&col=" . ($personaje["col"]+1);
+    $izquierda = "?row=". ($personaje["row"]) . "&col=" . ($personaje["col"]-1);
+    
+    $output = '
+        <a href="' . $arriba . '"><button>Arriba</button></a><br>
+        <a href="' . $abajo . '"><button>Abajo</button></a><br>
+        <a href="' . $derecha . '"><button>Derecha</button></a><br>
+        <a href="' . $izquierda . '"><button>Izquierda</button></a>
+    ';
+    
+    return $output;
+}
+
+function getMensajeMarkup ($arrayMensajes){
+    $output = ' ';
+
+    foreach ($arrayMensajes as $mensaje){
+        $output .= '<p>' .$mensaje. '</p>';
+    }
+
+    return $output;
+
+}
+
 //Lógica de negocio
 //El tablero es un array bidimensional en el que cada fila contiene 12 palabras cuyos valores pueden ser:
 // agua
@@ -53,10 +83,38 @@ function leerArchivoCSV($archivoCSV) {
     return $tablero;
 }
 
+function procesaRedirect() {
+    if (!isset($_GET['col'])&&!isset($_GET['row'])) {
+        header('Location: ./index.php?row=0&col=0');
+    }
+}
+
+function leerInput(){
+    $col = filter_input(INPUT_GET, 'col', FILTER_VALIDATE_INT);
+    $row = filter_input(INPUT_GET, 'row', FILTER_VALIDATE_INT);
+
+   
+    return (isset($col) && is_numeric($col) && isset($row) && is_numeric($row))? array(
+        'row' => $row,
+        'col' => $col
+    ) : null;    
+}
+
+function getMensaje ($personaje){
+
+    if (!isset($personaje)){
+        return array('La posición del personaje no está bien definida');
+    }
+
+    return array(' ');
+}
+
+$personaje = leerInput();
 $tablero = leerArchivoCSV('contenido_tablero/contenido.csv');
-$personaje = rand(0,143);
+$mensaje = getMensaje($personaje);
 //Lógica de presentación
 $tableroMarkup = getTableroMArkup($tablero, $personaje);
+$mensajesUsuarioMarkup = getMensajeMarkup ($mensaje);
 
 
 ?>
@@ -113,6 +171,14 @@ $tableroMarkup = getTableroMArkup($tablero, $personaje);
     <h1>Tablero juego super rol DWES</h1>
     <div class="contenedorTablero">
         <?php echo $tableroMarkup; ?>
+    </div>
+    <br>
+    <div>
+        <?php echo $mensajesUsuarioMarkup; ?>
+    </div>
+    <br>
+    <div>
+        <?php echo getArrowsMarkup($personaje); ?>
     </div>
 </body>
 </html>

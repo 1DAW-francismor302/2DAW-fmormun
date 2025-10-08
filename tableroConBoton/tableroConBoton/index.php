@@ -8,6 +8,8 @@ error_reporting(E_ALL);
 
 /* Zona de declaración de funciones */
 //*******Funciones de debugueo****
+procesaRedirect();
+
 function dump($var){
     echo '<pre>'.print_r($var,1).'</pre>';
 }
@@ -76,6 +78,12 @@ function leerArchivoCSV($rutaArchivoCSV) {
 }
 
 
+function procesaRedirect() {
+    if (!isset($_GET['col'])&&!isset($_GET['row'])) {
+        header('Location: ./index.php?row=0&col=0');
+    }
+}
+
 
 function leerInput(){
     $col = filter_input(INPUT_GET, 'col', FILTER_VALIDATE_INT);
@@ -83,11 +91,9 @@ function leerInput(){
 
    
     return (isset($col) && is_numeric($col) && isset($row) && is_numeric($row))? array(
-            'row' => $row,
-            'col' => $col
-        ) : null;    
-
-
+        'row' => $row,
+        'col' => $col
+    ) : null;    
 }
 
 function getMensaje ($posPersonaje){
