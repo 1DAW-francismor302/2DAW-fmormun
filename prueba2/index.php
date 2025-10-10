@@ -9,7 +9,7 @@ error_reporting(E_ALL);
 /* Zona de declaración de funciones */
 //Funciones de debugueo
 
-procesaRedirect();
+//procesaRedirect();
 
 function dump($var){
     echo '<pre>'.print_r($var,1).'</pre>';
@@ -34,22 +34,22 @@ function getTableroMArkup ($tablero, $personaje){
 
 }
 
-function getArrowsMarkup($personaje){
+// function getArrowsMarkup($personaje){
     
-    $arriba = "?row=". ($personaje["row"]-1) . "&col=" . ($personaje["col"]);
-    $abajo = "?row=". ($personaje["row"]+1) . "&col=" . ($personaje["col"]);
-    $derecha = "?row=". ($personaje["row"]) . "&col=" . ($personaje["col"]+1);
-    $izquierda = "?row=". ($personaje["row"]) . "&col=" . ($personaje["col"]-1);
+//     $arriba = "?row=". ($personaje["row"]-1) . "&col=" . ($personaje["col"]);
+//     $abajo = "?row=". ($personaje["row"]+1) . "&col=" . ($personaje["col"]);
+//     $derecha = "?row=". ($personaje["row"]) . "&col=" . ($personaje["col"]+1);
+//     $izquierda = "?row=". ($personaje["row"]) . "&col=" . ($personaje["col"]-1);
     
-    $output = '
-        <a href="' . $arriba . '"><button>Arriba</button></a><br>
-        <a href="' . $abajo . '"><button>Abajo</button></a><br>
-        <a href="' . $derecha . '"><button>Derecha</button></a><br>
-        <a href="' . $izquierda . '"><button>Izquierda</button></a>
-    ';
+//     $output = '
+//         <a href="' . $arriba . '"><button>Arriba</button></a><br>
+//         <a href="' . $abajo . '"><button>Abajo</button></a><br>
+//         <a href="' . $derecha . '"><button>Derecha</button></a><br>
+//         <a href="' . $izquierda . '"><button>Izquierda</button></a>
+//     ';
     
-    return $output;
-}
+//     return $output;
+// }
 
 function getMensajeMarkup ($arrayMensajes){
     $output = ' ';
@@ -83,11 +83,11 @@ function leerArchivoCSV($archivoCSV) {
     return $tablero;
 }
 
-function procesaRedirect() {
-    if (!isset($_GET['col'])&&!isset($_GET['row'])) {
-        header('Location: ./index.php?row=0&col=0');
-    }
-}
+// function procesaRedirect() {
+//     if (!isset($_GET['col'])&&!isset($_GET['row'])) {
+//         header('Location: ./index.php?row=0&col=0');
+//     }
+// }
 
 function leerInput(){
     $col = filter_input(INPUT_GET, 'col', FILTER_VALIDATE_INT);
